@@ -149,4 +149,13 @@ class AdvertRepository extends EntityRepository
       ->setParameter('published', true)
     ;
   }
+
+  public function purge($days)
+  {
+    $qb = $this->_em->createQueryBuilder()->delete($this->_entityName, 'a');
+    $qb->where('a.updatedAt < :date')->setParameter('date',new \DateTime('-'.$days.' days'));
+    $qb->andWhere('a.applications is empty');
+    return $qb->getQuery()->getResult();
+
+  }
 }

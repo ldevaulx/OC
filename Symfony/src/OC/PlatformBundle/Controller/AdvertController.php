@@ -83,6 +83,19 @@ class AdvertController extends Controller
     return $this->render('OCPlatformBundle:Advert:add.html.twig');
   }
 
+  public function purgeAction($days)
+  {
+   // On récupère le service
+    $advertpurger = $this->container->get('oc_platform.advert_purger');
+  
+
+    $num = $advertpurger->purge($days);
+
+    return new Response("Suppression de ".$num." annonces...");
+
+
+  }
+
   public function editAction($id)
   {
     // On récupère l'EntityManager
