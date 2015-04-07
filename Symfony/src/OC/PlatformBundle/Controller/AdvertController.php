@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class AdvertController extends Controller
 {
@@ -48,11 +49,16 @@ class AdvertController extends Controller
     ));
   }
 
-  public function viewAction($id)
+  /**
+ * @ParamConverter("advert", options={"mapping": {"advert_id": "id"}})
+ */
+  public function viewAction(Advert $advert)
   {
+    
     // On récupère l'EntityManager
     $em = $this->getDoctrine()->getManager();
 
+    /* plus besoin avec le paramconverter
     // Pour récupérer une annonce unique : on utilise find()
     $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 
@@ -60,6 +66,7 @@ class AdvertController extends Controller
     if ($advert === null) {
       throw $this->createNotFoundException("L'annonce d'id ".$id." n'existe pas.");
     }
+    */
 
     // On récupère la liste des advertSkill pour l'annonce $advert
     $listAdvertSkills = $em->getRepository('OCPlatformBundle:AdvertSkill')->findByAdvert($advert);
